@@ -1,0 +1,147 @@
+basePath: /api
+definitions:
+  serializers.ErrorResponse:
+    properties:
+      errors:
+        items:
+          $ref: '#/definitions/serializers.Response'
+        type: array
+    type: object
+  serializers.Response:
+    properties:
+      body: {}
+      code:
+        type: integer
+      message:
+        type: string
+    type: object
+  serializers.UserRegisterInput:
+    properties:
+      email:
+        maxLength: 100
+        minLength: 5
+        type: string
+      password:
+        minLength: 8
+        type: string
+      username:
+        maxLength: 50
+        minLength: 2
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+info:
+  contact: {}
+  description: This is a gofiber sample
+  title: API
+  version: 0.1.0
+paths:
+  /:
+    get:
+      description: Starting Page
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Home page of API
+      tags:
+      - Home
+  /api/:
+    get:
+      description: Gets list of routes
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/serializers.Response'
+      summary: Get API Routes
+      tags:
+      - Api
+  /api/auth/login:
+    post:
+      description: Logs in a user
+      parameters:
+      - description: Login Body
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/serializers.UserRegisterInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/serializers.Response'
+        "400":
+          description: Bad Request
+          schema:
+            items:
+              $ref: '#/definitions/serializers.ErrorResponse'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            items:
+              $ref: '#/definitions/serializers.ErrorResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            items:
+              $ref: '#/definitions/serializers.ErrorResponse'
+            type: array
+      summary: User Login
+      tags:
+      - Auth
+  /api/auth/register:
+    post:
+      description: Registers a user
+      parameters:
+      - description: Register Body
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/serializers.UserRegisterInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/serializers.Response'
+        "400":
+          description: Bad Request
+          schema:
+            items:
+              $ref: '#/definitions/serializers.ErrorResponse'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            items:
+              $ref: '#/definitions/serializers.ErrorResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            items:
+              $ref: '#/definitions/serializers.ErrorResponse'
+            type: array
+      summary: RegisterUser
+      tags:
+      - Auth
+securityDefinitions:
+  JWT:
+    type: basic
+swagger: "2.0"
